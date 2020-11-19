@@ -1,0 +1,15 @@
+{
+    "serverUrl": "https://mediatree.herokuapp.com",
+    "kakao_key": "d1336eb2cc8b2df7da6d18cc04965bda",
+    "path": ["/artist/list", "/video/download"],
+    "container": {
+        "maxWidth": 600, 
+        "marginBottom": 50
+    },
+    "theme": "pink",
+    "notice": {
+        "downError": "파일 변환에 실패하여 다운로드가 중지되었습니다",
+        "downSuccess": "파일 변환이 완료되어 다운로드를 시작합니다",
+        "inputError": "파일 이름을 입력하세요"
+    }
+}

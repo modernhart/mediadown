@@ -1,0 +1,43 @@
+.swiper-container {
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 300px;
+  height: auto;
+}
+
+.swiper-slide .img-fluid {
+  width: 100%;
+  height: auto;
+}
+
+.md-form {
+  /*margin-bottom: 0.5rem;*/
+}
+
+/* profile label */
+.form-group label:not(.btn) {
+  font-size: 1rem;
+  font-weight: 300;
+  color: #757575;
+}
+
+.form-group.notice .md-form {
+  margin-bottom: 0!important;
+}
+
+/* profile badge */
+.form-group .many .badge {
+  margin-right: .5rem!important;
+}
+
+/* border radio, checkbox button style */
+.form-group .many .btn {
+  border-radius: 10em;
+  padding: .5rem
+}
