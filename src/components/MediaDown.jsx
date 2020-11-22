@@ -52,7 +52,6 @@ const MediaDown = () => {
         }
 
 		dispatch(fileDown(form, canvasImage))
-		//dispatch(fileDownUnit())
     }
 
     useEffect(() => {

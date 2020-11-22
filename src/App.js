@@ -7,6 +7,7 @@ import MediaDown from './components/MediaDown';
 import MediaDetail from './components/MediaDetail';
 import ArtistList from './components/ArtistList';
 import MeUiAlert from './components/common/MeUiAlert';
+import ProgressLoader from './components/common/ProgressLoader';
 import { requestServer } from './action'
 
 import '@fortawesome/fontawesome-free/css/all.min.css'; 
@@ -33,6 +34,7 @@ function App() {
         </Switch>
       </Router>
       <MeUiAlert />
+      <ProgressLoader />
     </div>
   );
 }

@@ -3,30 +3,22 @@ import { MDBListGroup, MDBListGroupItem, MDBBadge, MDBAnimation, MDBContainer, M
 import Header from './common/Header'
 import { useSelector, useDispatch } from 'react-redux'
 import config from '../settings/config.json'
-import { fileDown, getVideos } from '../action'
-import Loader from './common/Loader';
+import { getVideos, getNextVideos } from '../action'
+import Loader from './common/Loader'
+import VideoList from './VideoList'
+
 // Import Swiper styles
 import 'swiper/swiper.scss'
 import '../App.css'
 import ImageGallery from 'react-image-gallery'
 import "react-image-gallery/styles/css/image-gallery.css";
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 
 const MediaDetail = (props) => {
   const {name} = props.match.params
   const {container} = config
-  const {medias, artImage, youtubeData, show} = useSelector(state => state.artist)
-  const {disabledBtn} = useSelector(state => state.media)
-  const [expanded, setExpanded] = React.useState(false);
+  const {medias, artImage, show, youtubeData, totalVideos, pageVideos, nextToken} = useSelector(state => state.artist)
   const dispatch = useDispatch()
-
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
 
   let item = artImage.map((v, i) => {
     return {
@@ -37,19 +29,9 @@ const MediaDetail = (props) => {
     }
   })
 
-  const DownLoad = (videoId) => {
-    dispatch(fileDown({link: `https://www.youtube.com/embed/${videoId}`}))
-  }
-
-  const getVideoData = (value, key) => {
-    let result = null
-    /* 유투브 혹은 샘플 데이터 get */
-    if (youtubeData) {
-      result = (key === "videoId")? value.id[key]: value.snippet[key]
-    } else {
-      result = value[key]
-    }
-    return result
+  const getNextData = (token) => {
+    console.log('getNextData', token)
+    dispatch(getNextVideos(name, token))
   }
 
   useEffect(() => {
@@ -74,36 +56,18 @@ const MediaDetail = (props) => {
             <p className="font-weight-bold mt-2"> <MDBBadge color="brown" pill>{name}</MDBBadge></p>
             <div className="form-group mt-3">
               <MDBListGroup>
-              {(medias && medias.map((val, index) => (
-                <MDBListGroupItem key={index} className="justify-content-between text-left p-0">
-                  <Accordion className="shadow-none" 
-                    expanded={expanded === getVideoData(val, 'title')} 
-                    onChange={handleChange(getVideoData(val, 'title'))}>
-                    <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    >
-                    {getVideoData(val, 'title')}
-                    </AccordionSummary>
-                    <AccordionDetails className="justify-content-center">
-                    <iframe width="560" height="315" src={`https://www.youtube.com/embed/${getVideoData(val, 'videoId')}`}
-                      frameBorder="0" 
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                      allowFullScreen>
-                    </iframe>
-                    </AccordionDetails>
-                    <div className="d-flex justify-content-center p-1">
-                      <MDBBtn color="brown" disabled={disabledBtn} className="btn-sm" onClick={() => DownLoad(getVideoData(val, 'videoId'))}>
-                        <MDBIcon icon="arrow-alt-circle-down" /> 다운로드
-                      </MDBBtn>
-                    </div>
-                  </Accordion>
-                </MDBListGroupItem>
-              )))}
-            </MDBListGroup>
+                <VideoList 
+                  medias={medias}
+                  youtubeData={youtubeData}
+                  pageVideos={pageVideos}  
+                />
+                {(youtubeData && nextToken)? (
+                  <MDBListGroupItem>
+                    <MDBIcon icon="chevron-down" className="d-flex justify-content-center" onClick={() => getNextData(nextToken)}/>
+                  </MDBListGroupItem>
+                ) : null}
+              </MDBListGroup>
             </div>
-          {/* <FavorButton matchingSome={true} /> */}
           </MDBAnimation>
         ) : <Loader />}
       </MDBContainer>

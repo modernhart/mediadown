@@ -12,6 +12,7 @@ export const NOTICE_SUCCESS = "NOTICE_SUCCESS"
 export const ALERT_CLOSE = "ALERT_CLOSE"
 export const ARTIST_LIST = "ARTIST_LIST"
 export const MEDIA_LIST = "MEDIA_LIST"
+export const MEDIA_NEXT = "MEDIA_NEXT"
 export const MEDIA_HIDE = "MEDIA_HIDE"
 
 const download = async (fileName) => {
@@ -121,6 +122,7 @@ export const fileDownUnit = (form, history) => async dispatch => {
 
 let fetchLink = "https://res.cloudinary.com/dungjiimg/image/fetch/w_400,h_400,c_fill/"
 
+/* sample data */
 const artists = [
     {
         id: 1,
@@ -138,6 +140,10 @@ const artists = [
             {
                 title: "밤편지",
                 videoId: "6744glqD6lk"
+            },
+            {
+                title: "첫 이별 그날 밤",
+                videoId: "zrtwnrFefwA"
             }
         ],
         images: [
@@ -158,6 +164,14 @@ const artists = [
                 title: "작은 것들을 위한 시",
                 videoId: "OEnvXsyGZmU"
             },
+            {
+                title: "봄날",
+                videoId: "Y4Zpm41f1VQ"
+            },
+            {
+                title: "FAKE LOVE",
+                videoId: "7C2z4GqqS5E"
+            },
         ],
         images: [
             fetchLink + "https://img.khan.co.kr/news/2020/01/08/l_2020010801000817800063351.jpg"
@@ -175,6 +189,14 @@ const artists = [
             {
                 title: "뻔한 남자",
                 videoId: "LfHkYr_cok4"
+            },
+            {
+                title: "결혼해줄래",
+                videoId: "g7cG4AThdsc"
+            },
+            {
+                title: "다줄꺼야",
+                videoId: "KATbxQqZFxo"
             },
         ],
         images: [
@@ -194,6 +216,14 @@ const artists = [
                 title: "오늘따라 보고싶어서 그래",
                 videoId: "E20WWeq_NSo"
             },
+            {
+                title: "안녕이라도 말하지마",
+                videoId: "UbAaX8NeR5w"
+            },
+            {
+                title: "미워도 사랑하니까",
+                videoId: "xtuh0ji_IaY"
+            },
         ],
         images: [
             fetchLink + "https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2018/07/05/zZJ0B8CArbfT636663839862096565.jpg"
@@ -211,6 +241,14 @@ const artists = [
             {
                 title: "Drama",
                 videoId: "0meMvE_7i1s"
+            },
+            {
+                title: "티켓",
+                videoId: "oBIiSH6miwI"
+            },
+            {
+                title: "기억해",
+                videoId: "Bfmj-8dgTUI"
             },
         ],
         images: [
@@ -232,9 +270,9 @@ export const getVideos = (query) => async dispatch => {
     const options={
 		q: query + " mp3 mv",
 		part: "snippet",
-		key: "AIzaSyBPFCJURbfvZzw5qM6bM3ozm7KIQhAeCk8",
+		key: "AIzaSyCu_rYO6Lq6u-rMYuc0uVRv7cqqdZocqok",
 		type: "video",
-		maxResults: 5
+        maxResults: 5
     };
     
     let queryString = Object.keys(options).map(function(key) {
@@ -242,7 +280,6 @@ export const getVideos = (query) => async dispatch => {
     }).join('&')
 
     const {video, images} = artists.find(val => val.name === query)
-    let isAPIData = false
 
     dispatch({
         type: MEDIA_HIDE
@@ -254,20 +291,65 @@ export const getVideos = (query) => async dispatch => {
         let youtubeVideo = []
         const res = await axios.get(searchLink + `?${queryString}`)
         youtubeVideo = res.data.items
-        isAPIData = true
+        const {totalResults, resultsPerPage} = res.data.pageInfo 
+        const nextToken = res.data.nextPageToken
 
         dispatch({
             type: MEDIA_LIST,
             payload: youtubeVideo,
-            isAPIData,
-            image: images
+            isAPIData: true,
+            image: images,
+            totalCount: totalResults,
+            pageCount: resultsPerPage,
+            nextToken
         })
     } catch(err) {
         dispatch({
             type: MEDIA_LIST,
             payload: video,
-            isAPIData,
+            isAPIData: false,
             image: images
+        })
+        dispatch({
+            type: NOTICE_ERROR,
+            payload: "youtubeError"
+        })
+    }
+}
+
+export const getNextVideos = (query, pageToken) => async dispatch => {
+    let searchLink = "https://www.googleapis.com/youtube/v3/search"
+    
+    const options={
+		q: query + " mp3 mv",
+		part: "snippet",
+		key: "AIzaSyCu_rYO6Lq6u-rMYuc0uVRv7cqqdZocqok",
+		type: "video",
+        maxResults: 5,
+        pageToken
+    };
+    
+    let queryString = Object.keys(options).map(function(key) {
+        return key + '=' + options[key]
+    }).join('&')
+
+    try {
+        /* 유투브 search API (하루 할당량 제한) */
+
+        let nextVideo = []
+        const res = await axios.get(searchLink + `?${queryString}`)
+        nextVideo = res.data.items
+        const nextToken = res.data.nextPageToken
+
+        dispatch({
+            type: MEDIA_NEXT,
+            payload: nextVideo,
+            nextToken
+        })
+    } catch(err) {
+        dispatch({
+            type: NOTICE_ERROR,
+            payload: "youtubeError"
         })
     }
 }
