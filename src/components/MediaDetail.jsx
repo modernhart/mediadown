@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import { MDBListGroup, MDBListGroupItem, MDBBadge, MDBAnimation, MDBContainer, MDBIcon, MDBBtn } from 'mdbreact';
+import { MDBListGroup, MDBListGroupItem, MDBBadge, MDBAnimation, MDBContainer, MDBIcon } from 'mdbreact';
 import Header from './common/Header'
 import { useSelector, useDispatch } from 'react-redux'
 import config from '../settings/config.json'
@@ -17,7 +17,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 const MediaDetail = (props) => {
   const {name} = props.match.params
   const {container} = config
-  const {medias, artImage, show, youtubeData, totalVideos, pageVideos, nextToken} = useSelector(state => state.artist)
+  const {medias, artImage, show, youtubeData, pageVideos, nextToken} = useSelector(state => state.artist)
   const dispatch = useDispatch()
 
   let item = artImage.map((v, i) => {

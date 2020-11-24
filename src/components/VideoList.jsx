@@ -38,8 +38,8 @@ const VideoList = ({medias, youtubeData, pageVideos}) => {
         {(medias && medias.map((val, index) => (
             <MDBListGroupItem key={index} className="justify-content-between text-left p-0">
               <Accordion className="shadow-none" 
-                expanded={expanded === getVideoData(val, 'title')} 
-                onChange={handleChange(getVideoData(val, 'title'))}>
+                expanded={expanded === index} 
+                onChange={handleChange(index)}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"

@@ -33,14 +33,14 @@ const Header = () => {
               <MDBNavLink to="/video/download">다운로드</MDBNavLink>
             </MDBNavItem>
           </MDBNavbarNav>
-          <MDBNavbarNav right>
+          {/* <MDBNavbarNav right>
             <MDBNavItem>
               <MDBNavLink to="#" onClick={() => console.log(1)}><MDBIcon fab icon="youtube" /></MDBNavLink>
             </MDBNavItem>
             <MDBNavItem>
               <MDBNavLink to="#"><MDBIcon fab icon="instagram" /></MDBNavLink>
             </MDBNavItem>
-          </MDBNavbarNav>
+          </MDBNavbarNav> */}
         </MDBCollapse>
       </MDBNavbar>
     </header>

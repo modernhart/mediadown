@@ -68,7 +68,6 @@ export const fileDown = (form, canvasImage, history) => async dispatch => {
                 payload: "downSuccess"
             })
             const down = await download(fileName)
-            console.log('down start')
         } else {
             dispatch({
                 type: NOTICE_ERROR,
@@ -291,7 +290,7 @@ export const getVideos = (query) => async dispatch => {
         let youtubeVideo = []
         const res = await axios.get(searchLink + `?${queryString}`)
         youtubeVideo = res.data.items
-        const {totalResults, resultsPerPage} = res.data.pageInfo 
+        const {resultsPerPage} = res.data.pageInfo 
         const nextToken = res.data.nextPageToken
 
         dispatch({
@@ -299,7 +298,6 @@ export const getVideos = (query) => async dispatch => {
             payload: youtubeVideo,
             isAPIData: true,
             image: images,
-            totalCount: totalResults,
             pageCount: resultsPerPage,
             nextToken
         })
