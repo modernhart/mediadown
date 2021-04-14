@@ -30,7 +30,7 @@ const VideoList = ({medias, youtubeData, pageVideos}) => {
     }
 
     const DownLoad = (videoId) => {
-        dispatch(fileDown({link: `https://www.youtube.com/embed/${videoId}`}))
+        dispatch(fileDown({link: `https://www.youtube.com/embed/${videoId}`, mediaType: 'audio'}))
     }
     
     return (

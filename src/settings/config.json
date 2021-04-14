@@ -1,5 +1,6 @@
 {
     "serverUrl": "https://mediatree.herokuapp.com",
+    "testUrl": "https://mysql-node-yvxnf.run.goorm.io",
     "path": ["/artist/list", "/video/download"],
     "container": {
         "maxWidth": 600, 

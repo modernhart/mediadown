@@ -48,26 +48,34 @@ export const requestServer = () => async dispatch => {
     }
 }
 
-export const fileDown = (form, canvasImage, history) => async dispatch => {
+export const fileDown = (form, canvasImage) => async dispatch => {
 	dispatch({
-		type: MEDIA_DOWNLOAD,
+		type: MEDIA_DOWNLOAD
     })
     try {
-        const result = await axios.post(ApiUrl + '/video', form)
+        const result = (form.mediaType == 'audio')? 
+        await axios.post(ApiUrl + '/audio', form): 
+        await axios.post(ApiUrl + '/video', form)
         const {success, data} = result.data
 
         if (success) {
-            let mediaPath = data.file
-            if (canvasImage) {
-                const res = await saveCoverImage(canvasImage, mediaPath)
+            let media = data.file
+            let fileName
+            if (form.mediaType == 'audio') {
+                if (canvasImage) {
+                    await saveCoverImage(canvasImage, media)
+                }
+                const splitLink = media.split('/')
+                fileName = splitLink[splitLink.length - 1]
+            } else {
+                fileName = media
             }
-			const splitLink = mediaPath.split('/')
-			const fileName = splitLink[splitLink.length - 1]
             dispatch({
                 type: NOTICE_SUCCESS,
                 payload: "downSuccess"
             })
-            const down = await download(fileName)
+            console.log(fileName)
+            await download(fileName)
         } else {
             dispatch({
                 type: NOTICE_ERROR,
@@ -99,7 +107,7 @@ async function saveCoverImage(canvasImage, mediaPath) {
         coverData.append('mediaPath', mediaPath)
         //form = {...form, cover: file}
         
-        const res = await axios.post(ApiUrl + '/video/cover', coverData)
+        const res = await axios.post(ApiUrl + '/audio/cover', coverData)
         return res.data
     } catch (err) {
         console.log('error: ', err);

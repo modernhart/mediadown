@@ -26,7 +26,7 @@ const Header = () => {
         <MDBNavbarToggler onClick={ onClick } />
         <MDBCollapse isOpen = { collapse } navbar>
           <MDBNavbarNav left>
-            <MDBNavItem active={headIndex === 0}>
+            <MDBNavItem active={headIndex !== 1}>
               <MDBNavLink to="/artist/list">아티스트</MDBNavLink>
             </MDBNavItem>
             <MDBNavItem active={headIndex === 1}>
